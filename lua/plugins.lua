@@ -47,6 +47,12 @@ return require('packer').startup(function()
       }
   }
 
+  -- Null-LS
+  use({
+    "jose-elias-alvarez/null-ls.nvim",
+      requires = { "nvim-lua/plenary.nvim" },
+  })
+
   -- Autopairs
   use { "windwp/nvim-autopairs" }
 
@@ -58,6 +64,9 @@ return require('packer').startup(function()
 
   ---- Markdown Preview
   use { "iamcco/markdown-preview.nvim", run = "cd app && npm install", setup = function() vim.g.mkdp_filetypes = { "markdown" } end, ft = { "markdown" }, }
+
+  -- Comment
+  use { "numToStr/Comment.nvim" }
 
   ---- Simple plugins can be specified as strings
   --use '9mm/vim-closer'

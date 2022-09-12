@@ -23,7 +23,9 @@ colorscheme dracula
 " Telescope Mappings
 nnoremap <leader>ff <cmd>lua require('telescope.builtin').find_files()<cr>
 nnoremap <leader>gf <cmd>lua require('telescope.builtin').git_files()<cr>
+nnoremap <leader>lg <cmd>lua require('telescope.builtin').live_grep()<cr>
 
 " Autoformat files
 autocmd BufWritePre * lua vim.lsp.buf.formatting_sync()
 
+autocmd BufWritePre *.go lua go_org_imports()
