@@ -1,0 +1,9 @@
+failureThreshold
+k8s
+kubelet
+backends
+livenessProbe
+initialDelaySeconds
+periodSeconds
+startupProbe
+StartupProbes

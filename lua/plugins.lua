@@ -27,10 +27,13 @@ return require('packer').startup(function()
   use { 'neovim/nvim-lspconfig' }
 
   -- Rust Specific bits
-  --use { 'simrat39/rust-tools.nvim' }
+  use { 'simrat39/rust-tools.nvim' }
     
   -- Debugging
-  --use { 'mfussenegger/nvim-dap' }
+  use { 'https://github.com/mfussenegger/nvim-dap' }
+  use { 'https://github.com/rcarriga/nvim-dap-ui' }
+  use { 'https://github.com/leoluz/nvim-dap-go' }
+  use { 'theHamsta/nvim-dap-virtual-text' }
 
   -- Autocompletion bits
   use {
@@ -63,7 +66,8 @@ return require('packer').startup(function()
   use { "kylechui/nvim-surround" }
 
   ---- Markdown Preview
-  use { "iamcco/markdown-preview.nvim", run = "cd app && npm install", setup = function() vim.g.mkdp_filetypes = { "markdown" } end, ft = { "markdown" }, }
+  --use ({ "iamcco/markdown-preview.nvim", run = "cd app && npm install", setup = function() vim.g.mkdp_filetypes = { "markdown" } end, ft = { "markdown" }, })
+  use({ "iamcco/markdown-preview.nvim", run = function() vim.fn["mkdp#util#install"]() end, })
 
   -- Comment
   use { "numToStr/Comment.nvim" }

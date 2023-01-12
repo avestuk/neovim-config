@@ -23,9 +23,9 @@ local custom_attach = function(client, bufnr)
     buf_set_keymap('n', '<space>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
     buf_set_keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
     buf_set_keymap('n', '<space>e', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
-    buf_set_keymap('n', '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
-    buf_set_keymap('n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
-    buf_set_keymap('n', '<space>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
+    buf_set_keymap('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
+    buf_set_keymap('n', ']d', '<cmd>lua vim..diagnostic.goto_next()<CR>', opts)
+    buf_set_keymap('n', '<space>q', '<cmd>lua vim.diagnostic.setloclist()<CR>', opts)
     buf_set_keymap('n', '<space>f', '<cmd>lua vim.lsp.buf.formatting()<CR>', opts)
 end
 
@@ -95,8 +95,7 @@ cmp.event:on(
     cmp_autopairs.on_confirm_done { map_char = { tex = "" } }
     )
 
-local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
+local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
 
 -- GoPls
 util = require "lspconfig/util"
@@ -131,13 +130,33 @@ function go_org_imports(wait_ms)
   end
 end
 
+-- Snyk
+
+-- vim.lsp.set_log_level 'trace'
+-- if vim.fn.has 'nvim-0.5.1' == 1 then
+--     require('vim.lsp.log').set_format_func(vim.inspect)
+-- end
+--
+-- lspconfig.configs.snyk = {
+--     configs.snyk = {
+--        default_config = {
+--           cmd = {'/usr/local/bin/snyk-ls','-f','/Users/alexander.vest/.cache/nvim/lsp.log'},
+--           root_dir = function(name)
+--               return lspconfig.util.find_git_ancestor(name) or vim.loop.os_homedir()
+--           end,
+--           init_options = {
+--               activateSnykCode = "true",
+--           }
+--        }
+--     }
+-- }
 
 -- For servers that don't need any config
 local servers = {"bashls", "terraformls", "rust_analyzer", "pyright"}
 
 for _, lsp in ipairs(servers) do
 	lspconfig[lsp].setup {
-            capabilities = capabilities,
+            capabilities = capabilities, 
             on_attach = custom_attach,
         }
 end
