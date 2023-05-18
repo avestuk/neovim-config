@@ -6,11 +6,11 @@ local lspconfig = require "lspconfig"
 
 local ok, nvim_status = pcall(require, "lsp-status")
 if not ok then
-  nvim_status = nil
+    nvim_status = nil
 end
 
 local custom_attach = function(client, bufnr)
-    local opts = { noremap=true, silent=true }
+    local opts = { noremap = true, silent = true }
     local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
     local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
 
@@ -42,31 +42,31 @@ local luasnip = require('luasnip')
 vim.o.completeopt = 'menuone,noselect'
 
 cmp.setup {
-	-- Format the autocomplete menu
-	formatting = {
-		format = lspkind.cmp_format({
-                    mode = 'symbol',
-                    maxwidth = 50,
-                })
-	},
-	mapping = {
+    -- Format the autocomplete menu
+    formatting = {
+        format = lspkind.cmp_format({
+            mode = 'symbol',
+            maxwidth = 50,
+        })
+    },
+    mapping = {
         -- Use Tab and shift-Tab to navigate autocomplete menu
         ['<Tab>'] = function(fallback)
             if cmp.visible() then
-              cmp.select_next_item()
+                cmp.select_next_item()
             elseif luasnip.expand_or_jumpable() then
-              luasnip.expand_or_jump()
+                luasnip.expand_or_jump()
             else
-              fallback()
+                fallback()
             end
-          end,
+        end,
         ['<S-Tab>'] = function(fallback)
             if cmp.visible() then
-              cmp.select_prev_item()
-            elseif luasnip.jumpable(-1) then
-              luasnip.jump(-1)
+                cmp.select_prev_item()
+            elseif luasnip.jumpable( -1) then
+                luasnip.jump( -1)
             else
-              fallback()
+                fallback()
             end
         end,
         ['<CR>'] = cmp.mapping.confirm {
@@ -95,44 +95,108 @@ autopairs.setup({
 })
 local cmp_autopairs = require "nvim-autopairs.completion.cmp"
 cmp.event:on(
-    "confirm_done", 
+    "confirm_done",
     cmp_autopairs.on_confirm_done { map_char = { tex = "" } }
-    )
+)
 
 local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
 
 -- GoPls
 util = require "lspconfig/util"
 lspconfig.gopls.setup {
-  cmd = {"gopls", "serve"},
-  filetypes = {"go", "gomod"},
-  root_dir = util.root_pattern("go.work", "go.mod", ".git"),
-  settings = {
-    gopls = {
-      analyses = {
-        unusedparams = true,
-      },
-      staticcheck = true,
-      buildFlags = {"-tags=e2e integration"}
+    cmd = { "gopls", "serve" },
+    filetypes = { "go", "gomod" },
+    root_dir = util.root_pattern("go.work", "go.mod", ".git"),
+    settings = {
+        gopls = {
+            analyses = {
+                unusedparams = true,
+            },
+            staticcheck = true,
+            buildFlags = { "-tags=e2e integration" }
+        },
     },
-  },
-  capabilities = capabilities,
-  on_attach = custom_attach,
+    capabilities = capabilities,
+    on_attach = custom_attach,
 }
 
 function go_org_imports(wait_ms)
-  local params = vim.lsp.util.make_range_params()
-  params.context = {only = {"source.organizeImports"}}
-  local result = vim.lsp.buf_request_sync(0, "textDocument/codeAction", params, wait_ms)
-  for cid, res in pairs(result or {}) do
-    for _, r in pairs(res.result or {}) do
-      if r.edit then
-        local enc = (vim.lsp.get_client_by_id(cid) or {}).offset_encoding or "utf-16"
-        vim.lsp.util.apply_workspace_edit(r.edit, enc)
-      end
+    local params = vim.lsp.util.make_range_params()
+    params.context = { only = { "source.organizeImports" } }
+    local result = vim.lsp.buf_request_sync(0, "textDocument/codeAction", params, wait_ms)
+    for cid, res in pairs(result or {}) do
+        for _, r in pairs(res.result or {}) do
+            if r.edit then
+                local enc = (vim.lsp.get_client_by_id(cid) or {}).offset_encoding or "utf-16"
+                vim.lsp.util.apply_workspace_edit(r.edit, enc)
+            end
+        end
     end
-  end
 end
+
+-- Rust
+local extension_path = '/Users/alexander.vest/.local/share/nvim/mason/packages/codelldb/extension/'
+local codelldb_path = extension_path .. 'adapter/codelldb'
+local liblldb_path = extension_path .. 'lldb/lib/liblldb.dylib'
+
+local opts = {
+    tools = {
+        runnables = {
+            use_telescope = true,
+        },
+        inlay_hints = {
+            auto = true,
+            show_parameter_hints = true,
+            parameter_hints_prefix = "<- ",
+            other_hints_prefix = "=>",
+        },
+    },
+    -- all the opts to send to nvim-lspconfig
+    -- these override the defaults set by rust-tools.nvim
+    -- see https://github.com/neovim/nvim-lspconfig/blob/master/CONFIG.md#rust_analyzer
+    server = {
+        -- on_attach is a callback called when the language server attachs to the buffer
+        on_attach = custom_attach,
+        settings = {
+            -- to enable rust-analyzer settings visit:
+            -- https://github.com/rust-analyzer/rust-analyzer/blob/master/docs/user/generated_config.adoc
+            ["rust-analyzer"] = {
+                -- enable clippy on save
+                checkOnSave = {
+                    command = "clippy",
+                },
+            },
+        },
+    },
+    dap = {
+        adapter = require('rust-tools.dap').get_codelldb_adapter(
+            codelldb_path, liblldb_path)
+    }
+}
+
+require("rust-tools").setup(opts)
+require('rust-tools').runnables.runnables()
+
+--lspconfig.rust_analyzer.setup {
+--    capabilities = capabilities,
+--    on_attach = custom_attach,
+--    settings = {
+--        ["rust-analyzer"] = {
+--            checkOnSave = {
+--                command = "clippy",
+--            },
+--            inlayHints = {
+--                lifetimeElisionHints = {
+--                    enable = true,
+--                    useParameterNames = true
+--                },
+--            },
+--        },
+--    },
+--    cmd = {
+--        "rustup", "run", "stable", "rust-analyzer",
+--    }
+--}
 
 -- Snyk
 
@@ -155,13 +219,23 @@ end
 --     }
 -- }
 
+
+-- JSON
+local capabilities_json = capabilities
+capabilities_json.textDocument.completion.completionItem.snippetSupport = true
+require 'lspconfig'.jsonls.setup {
+    capabilities = capabilities_json,
+    on_attach = custom_attach,
+}
+
 -- For servers that don't need any config
-local servers = {"bashls", "terraformls", "rust_analyzer", "pyright"}
+local servers = { "bashls", "pyright", "lua_ls", "terraformls"}
 
 for _, lsp in ipairs(servers) do
-	lspconfig[lsp].setup {
-            capabilities = capabilities, 
-            on_attach = custom_attach,
-        }
+    lspconfig[lsp].setup {
+        capabilities = capabilities,
+        on_attach = custom_attach,
+    }
 end
+
 
