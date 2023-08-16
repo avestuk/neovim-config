@@ -88,6 +88,182 @@ cmp.setup {
     },
 }
 
+-- some shorthands...
+local snip = luasnip.snippet
+local node = luasnip.snippet_node
+local text = luasnip.text_node
+local insert = luasnip.insert_node
+local func = luasnip.function_node
+local choice = luasnip.choice_node
+local dynamicn = luasnip.dynamic_node
+
+local date = function()
+    return { os.date "%Y-%m-%d" }
+end
+
+local filename = function()
+    return { vim.fn.expand "%:p" }
+end
+
+
+luasnip.add_snippets(nil, {
+    all = {
+        snip({
+            trig = "date",
+            namr = "Date",
+            dscr = "Date in the form of YYYY-MM-DD",
+        }, {
+            func(date, {}),
+        }),
+        snip({
+            trig = "filename",
+            namr = "Filename",
+            dscr = "Absolute path to file",
+        }, {
+            func(filename, {}),
+        }),
+    },
+    sh = {
+        snip("shebang", {
+            text { "#!/bin/sh", "" },
+            insert(0),
+        }),
+    },
+    python = {
+        snip("shebang", {
+            text { "#!/usr/bin/env python", "" },
+            insert(0),
+        }),
+    },
+    lua = {
+        snip("shebang", {
+            text { "#!/usr/bin/lua", "", "" },
+            insert(0),
+        }),
+        snip("req", {
+            text "require('",
+            insert(1, "Module-name"),
+            text "')",
+            insert(0),
+        }),
+        snip("func", {
+            text "function(",
+            insert(1, "Arguments"),
+            text { ")", "\t" },
+            insert(2),
+            text { "", "end", "" },
+            insert(0),
+        }),
+        snip("forp", {
+            text "for ",
+            insert(1, "k"),
+            text ", ",
+            insert(2, "v"),
+            text " in pairs(",
+            insert(3, "table"),
+            text { ") do", "\t" },
+            insert(4),
+            text { "", "end", "" },
+            insert(0),
+        }),
+        snip("fori", {
+            text "for ",
+            insert(1, "k"),
+            text ", ",
+            insert(2, "v"),
+            text " in ipairs(",
+            insert(3, "table"),
+            text { ") do", "\t" },
+            insert(4),
+            text { "", "end", "" },
+            insert(0),
+        }),
+        snip("if", {
+            text "if ",
+            insert(1),
+            text { " then", "\t" },
+            insert(2),
+            text { "", "end", "" },
+            insert(0),
+        }),
+        snip("M", {
+            text { "local M = {}", "", "" },
+            insert(0),
+            text { "", "", "return M" },
+        }),
+    },
+    go = {
+        snip("test", {
+            text "func ",
+            insert(1, "Name"),
+            text "(t *testing.T)",
+            text { " {", "" },
+            text "\t",
+            insert(0),
+            text { "", "}" },
+        }),
+        snip("typei", {
+            text "type ",
+            insert(1, "Name"),
+            text { " interface {", "" },
+            text "\t",
+            insert(0),
+            text { "", "}" },
+        }),
+        snip("types", {
+            text "type ",
+            insert(1, "Name"),
+            text { " struct {", "" },
+            text "\t",
+            insert(0),
+            text { "", "}" },
+        }),
+        snip("func", {
+            text "func ",
+            insert(1, "Name"),
+            text "(",
+            insert(2),
+            text ")",
+            insert(3),
+            text { " {", "" },
+            text "\t",
+            insert(0),
+            text { "", "}" },
+        }),
+        snip("if", {
+            text "if ",
+            insert(1, "true"),
+            text { " {", "" },
+            text "\t",
+            insert(0),
+            text { "", "}" },
+        }),
+
+        snip("fori", {
+            text "for ",
+            insert(1, "i := 0"),
+            text ";",
+            insert(2, "i < 10"),
+            text ";",
+            insert(3, "i++"),
+            text { " {", "" },
+            text "\t",
+            insert(0),
+            text { "", "}" },
+        }),
+        snip("forr", {
+            text "for ",
+            insert(1, "k, v"),
+            text " := range ",
+            insert(2, "expr"),
+            text { " {", "" },
+            text "\t",
+            insert(0),
+            text { "", "}" },
+        }),
+    },
+})
+
 -- Autopairs
 local autopairs = require("nvim-autopairs")
 autopairs.setup({
