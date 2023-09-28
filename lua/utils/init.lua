@@ -58,7 +58,7 @@ M.lsp_servers = {
 	"jsonls",
 	"lua_ls",
 	"tflint",
-	"terraform-ls",
+	"terraformls",
 	"yamlls",
 }
 
