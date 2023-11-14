@@ -18,7 +18,7 @@ local M = {
 			end
 			local line, col = vim.F.unpack_len(vim.api.nvim_win_get_cursor(0))
 			return col ~= 0 and
-			vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
+			    vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
 		end
 
 		local luasnip = require("luasnip")
@@ -33,7 +33,7 @@ local M = {
 				format = function(entry, vim_item)
 					if vim.tbl_contains({ "path" }, entry.source.name) then
 						local icon, hl_group = require("nvim-web-devicons").get_icon(entry
-						:get_completion_item().label)
+							:get_completion_item().label)
 						if icon then
 							vim_item.kind = icon
 							vim_item.kind_hl_group = hl_group

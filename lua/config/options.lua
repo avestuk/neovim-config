@@ -7,3 +7,4 @@ vim.opt.relativenumber = true
 vim.opt.smartcase = true
 vim.opt.swapfile = false
 vim.opt.termguicolors = true
+vim.opt.clipboard = "unnamedplus"

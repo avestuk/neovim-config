@@ -43,10 +43,13 @@ M.lsp_kinds = {
 
 M.mason_packages = {
 	"bash-language-server",
+	"black",
+	"flake8",
 	"gopls",
 	"json-lsp",
 	"lua-language-server",
 	"markdownlint",
+	"pyright",
 	"terraform-ls",
 	"tflint",
 	"yaml-language-server",
@@ -57,8 +60,9 @@ M.lsp_servers = {
 	"gopls",
 	"jsonls",
 	"lua_ls",
-	"tflint",
+	"pyright",
 	"terraformls",
+	"tflint",
 	"yamlls",
 }
 

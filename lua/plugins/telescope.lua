@@ -1,17 +1,19 @@
 local M = {
-	'nvim-telescope/telescope.nvim', tag = '0.1.3',
+	'nvim-telescope/telescope.nvim',
+	tag = '0.1.3',
 	event = "BufReadPre",
 	dependencies = {
-	      {"nvim-lua/plenary.nvim"},
-	      {"nvim-telescope/telescope-fzf-native.nvim", build = "make" },
-	      { "nvim-telescope/telescope-ui-select.nvim" },
-      	},
-      	keys = {
-		{ "<leader>fF", "<cmd>lua require('telescope.builtin').find_files()<cr>" },
-		{ "<leader>ff", "<cmd>lua require('telescope.builtin').git_files()<cr>" },
-		{ "<leader>fg", "<cmd>lua require('telescope.builtin').live_grep()<cr>" },
-		{ "<leader>fb", "<cmd>lua require('telescope.builtin').buffers()<cr>" },
-		{ "<leader>fd", "<cmd>lua require('telescope.builtin').diagnostics()<cr>" },
+		{ "nvim-lua/plenary.nvim" },
+		{ "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
+		{ "nvim-telescope/telescope-ui-select.nvim" },
+	},
+	keys = {
+		{ "<leader>fF", function() require('telescope.builtin').find_files() end },
+		{ "<leader>ff", function() require('telescope.builtin').git_files() end },
+		{ "<leader>fg", function() require('telescope.builtin').live_grep() end },
+		{ "<leader>fb", function() require('telescope.builtin').buffers() end },
+		{ "<leader>fd", function() require('telescope.builtin').diagnostics() end },
+		{ "<leader>hm", "<cmd>Telescope harpoon marks<cr>" },
 	},
 	opts = function()
 		local actions = require("telescope.actions")
@@ -49,6 +51,6 @@ local M = {
 		telescope.load_extension("fzf")
 		telescope.load_extension("ui-select")
 	end,
-    }
+}
 
 return M

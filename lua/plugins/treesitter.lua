@@ -13,6 +13,7 @@ local M = {
 			"json",
 			"lua",
 			"markdown",
+			"python",
 			"rust",
 			"yaml",
 		},
