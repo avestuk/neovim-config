@@ -1,12 +1,7 @@
 local M = {
 	"ThePrimeagen/harpoon",
-	event = "BufReadPre",
-	keys = {
-
-		{ "<leader>hx", function() require("harpoon.mark").add_file() end, desc = "Harpoon mark" },
-		{ "<leader>hn", function() require("harpoon.ui").nav_next() end,   desc = "Harpoon next" },
-		{ "<leader>hp", function() require("harpoon.ui").nav_prev() end,   desc = "Harpoon prev" },
-	},
+	branch = "harpoon2",
+	lazy = false,
 	opts = {
 		global_settings = {
 			-- sets the marks upon calling `toggle` on the ui, instead of require `:w`.
@@ -33,10 +28,38 @@ local M = {
 			tabline_suffix = "   ",
 		}
 	},
-	config = function(_, opts)
-		require("harpoon").setup(opts.global_settings)
-		local telescope = require("telescope")
-		telescope.load_extension("harpoon")
+	config = function()
+		local harpoon = require("harpoon")
+		harpoon:setup()
+
+		local function map(lhs, rhs, opts)
+			vim.keymap.set("n", lhs, rhs, opts or {})
+		end
+
+		local conf = require("telescope.config").values
+		local function toggle_telescope(harpoon_files)
+			local file_paths = {}
+			for _, item in ipairs(harpoon_files.items) do
+				table.insert(file_paths, item.value)
+			end
+
+			require("telescope.pickers").new({}, {
+				prompt_title = "Harpoon",
+				finder = require("telescope.finders").new_table({
+					results = file_paths,
+				}),
+				previewer = conf.file_previewer({}),
+				sorter = conf.generic_sorter({}),
+			}):find()
+		end
+
+		map("<leader>h", function() toggle_telescope(harpoon:list()) end)
+		map("<leader>a", function() harpoon:list():append() end)
+		map("<leader>1", function() harpoon:list():select(1) end)
+		map("<leader>2", function() harpoon:list():select(2) end)
+		map("<leader>3", function() harpoon:list():select(3) end)
+		map("<leader>4", function() harpoon:list():select(4) end)
+		map("<leader>dh", function() harpoon:list():clear() end)
 	end,
 }
 
