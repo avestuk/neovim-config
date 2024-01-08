@@ -51,6 +51,9 @@ M.setup = function()
 	vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, bufopts)
 	vim.keymap.set('n', ']d', vim.diagnostic.goto_next, bufopts)
 	vim.keymap.set('n', '<space>e', vim.diagnostic.setloclist, bufopts)
+	vim.keymap.set('i', '<C-h>', function()
+		vim.lsp.buf.signature_help()
+	end, bufopts)
 
 	-- show diagnostics in hover window
 	vim.api.nvim_create_autocmd("CursorHold", {
