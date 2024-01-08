@@ -5,7 +5,7 @@ local M = {
 	opts = {
 		global_settings = {
 			-- sets the marks upon calling `toggle` on the ui, instead of require `:w`.
-			save_on_toggle = false,
+			save_on_toggle = true,
 
 			-- saves the harpoon file upon every change. disabling is unrecommended.
 			save_on_change = true,
@@ -36,24 +36,7 @@ local M = {
 			vim.keymap.set("n", lhs, rhs, opts or {})
 		end
 
-		local conf = require("telescope.config").values
-		local function toggle_telescope(harpoon_files)
-			local file_paths = {}
-			for _, item in ipairs(harpoon_files.items) do
-				table.insert(file_paths, item.value)
-			end
-
-			require("telescope.pickers").new({}, {
-				prompt_title = "Harpoon",
-				finder = require("telescope.finders").new_table({
-					results = file_paths,
-				}),
-				previewer = conf.file_previewer({}),
-				sorter = conf.generic_sorter({}),
-			}):find()
-		end
-
-		map("<leader>h", function() toggle_telescope(harpoon:list()) end)
+		map("<leader>h", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end)
 		map("<leader>a", function() harpoon:list():append() end)
 		map("<leader>1", function() harpoon:list():select(1) end)
 		map("<leader>2", function() harpoon:list():select(2) end)
