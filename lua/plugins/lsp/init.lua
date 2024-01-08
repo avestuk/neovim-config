@@ -24,6 +24,19 @@ return {
 						capabilities = lsp_utils.capabilities,
 					})
 				end,
+				["gopls"] = function()
+					lspconfig.gopls.setup({
+						on_attach = lsp_utils.on_attach,
+						capabilities = lsp_utils.capabilities,
+						settings = {
+							gopls = {
+								gofumpt = true,
+								staticcheck = true
+							},
+						},
+
+					})
+				end,
 				["pyright"] = function()
 					lspconfig.pyright.setup({
 						on_attach = lsp_utils.on_attach,
