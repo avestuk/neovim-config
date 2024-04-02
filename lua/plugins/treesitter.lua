@@ -33,9 +33,10 @@ local M = {
 		incremental_selection = {
 			enable = true,
 			keymaps = {
-				init_selection = 'ga',
-				node_incremental = 'ga',
-				node_decremental = 'gz',
+				init_selection = '<space>',
+				node_incremental = '<space>',
+				node_decremental = '<bs>',
+				scope_incremental = '<tab>'
 			},
 		},
 		sync_install = true,

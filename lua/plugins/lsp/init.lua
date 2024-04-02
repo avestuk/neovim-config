@@ -37,6 +37,17 @@ return {
 
 					})
 				end,
+				["lua_ls"] = function()
+					lspconfig.lua_ls.setup {
+						settings = {
+							Lua = {
+								diagnostics = {
+									globals = { "vim" }
+								}
+							}
+						}
+					}
+				end,
 				["pyright"] = function()
 					lspconfig.pyright.setup({
 						on_attach = lsp_utils.on_attach,
@@ -50,6 +61,29 @@ return {
 						},
 					})
 				end,
+				["yamlls"] = function()
+					lspconfig.yamlls.setup({
+						on_attach = lsp_utils.on_attach,
+						capabilities = lsp_utils.capabilities,
+						settings = {
+							yaml = {
+								format = {
+									enable = true,
+								},
+								hover = true,
+								completion = true,
+								schemaStore = {
+									enable = true,
+									url =
+									"https://www.schemastore.org/api/json/catalog.json",
+								},
+								schemas = {
+									kubernetes = "*.yaml",
+								},
+							}
+						}
+					})
+				end
 			})
 		end,
 	},

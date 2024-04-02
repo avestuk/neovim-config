@@ -7,7 +7,7 @@ M.capabilities = require("cmp_nvim_lsp").default_capabilities(capabilities)
 
 M.setup = function()
 	vim.diagnostic.config({
-		virtual_text = false,
+		virtual_text = true,
 		float = {
 			focusable = false,
 			style = "minimal",
@@ -51,7 +51,7 @@ M.setup = function()
 	vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, bufopts)
 	vim.keymap.set('n', ']d', vim.diagnostic.goto_next, bufopts)
 	vim.keymap.set('n', '<space>e', vim.diagnostic.setloclist, bufopts)
-	vim.keymap.set('i', '<C-h>', function()
+	vim.keymap.set('i', '<C-k>', function()
 		vim.lsp.buf.signature_help()
 	end, bufopts)
 
