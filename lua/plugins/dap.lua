@@ -6,6 +6,7 @@ local M = {
 			config = function(_, opts)
 				require("dapui").setup(opts)
 			end,
+			dependencies = { "nvim-neotest/nvim-nio" },
 			keys = {
 				{ "<leader>du", function() require("dapui").toggle({}) end, desc = "Dap UI" },
 			}
