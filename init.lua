@@ -1,6 +1,9 @@
 -- Load vim options
 require("config.options")
 
+--Load keybinds
+require("config.keybinds")
+
 -- Load plugins
 require("config.lazy")
 

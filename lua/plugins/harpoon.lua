@@ -1,6 +1,10 @@
 local M = {
 	"ThePrimeagen/harpoon",
 	branch = "harpoon2",
+	dependencies = {
+		"nvim-lua/plenary.nvim",
+		"nvim-telescope/telescope.nvim"
+	},
 	lazy = false,
 	opts = {
 		global_settings = {
@@ -20,7 +24,7 @@ local M = {
 			excluded_filetypes = { "harpoon" },
 
 			-- set marks specific to each git branch inside git repository
-			mark_branch = false,
+			mark_branch = true,
 
 			-- enable tabline with harpoon marks
 			tabline = false,
@@ -32,17 +36,31 @@ local M = {
 		local harpoon = require("harpoon")
 		harpoon:setup()
 
-		local function map(lhs, rhs, opts)
-			vim.keymap.set("n", lhs, rhs, opts or {})
+		local conf = require("telescope.config").values
+		local function toggle_telescope(harpoon_files)
+			local file_paths = {}
+			for _, item in ipairs(harpoon_files.items) do
+				table.insert(file_paths, item.value)
+			end
+
+			require("telescope.pickers").new({}, {
+				prompt_title = "Harpoon",
+				finder = require("telescope.finders").new_table({
+					results = file_paths,
+				}),
+				previewer = conf.file_previewer({}),
+				sorter = conf.generic_sorter({}),
+			}):find()
 		end
 
-		map("<leader>h", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end)
-		map("<leader>a", function() harpoon:list():append() end)
-		map("<leader>1", function() harpoon:list():select(1) end)
-		map("<leader>2", function() harpoon:list():select(2) end)
-		map("<leader>3", function() harpoon:list():select(3) end)
-		map("<leader>4", function() harpoon:list():select(4) end)
-		map("<leader>dh", function() harpoon:list():clear() end)
+		vim.keymap.set("n", "<leader>h", function() toggle_telescope(harpoon:list()) end,
+			{ desc = "Open harpoon window" })
+		vim.keymap.set("n", "<leader>a", function() harpoon:list():add() end)
+		vim.keymap.set("n", "<leader>1", function() harpoon:list():select(1) end)
+		vim.keymap.set("n", "<leader>2", function() harpoon:list():select(2) end)
+		vim.keymap.set("n", "<leader>3", function() harpoon:list():select(3) end)
+		vim.keymap.set("n", "<leader>4", function() harpoon:list():select(4) end)
+		vim.keymap.set("n", "<leader>dh", function() harpoon:list():clear() end)
 	end,
 }
 

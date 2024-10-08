@@ -42,6 +42,7 @@ M.lsp_kinds = {
 
 
 M.mason_packages = {
+	"actionlint",
 	"bash-language-server",
 	"black",
 	"flake8",
@@ -64,6 +65,7 @@ M.lsp_servers = {
 	"jsonls",
 	"lua_ls",
 	"pyright",
+	--"rust_analyzer",
 	"terraformls",
 	"tflint",
 	"yamlls",

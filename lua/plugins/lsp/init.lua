@@ -78,7 +78,7 @@ return {
 									"https://www.schemastore.org/api/json/catalog.json",
 								},
 								schemas = {
-									kubernetes = "*.yaml",
+									--kubernetes = "*.yaml",
 								},
 							}
 						}

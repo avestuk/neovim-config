@@ -7,6 +7,7 @@ vim.api.nvim_create_autocmd("BufWritePre", {
 })
 
 
+-- Organise go imports
 vim.api.nvim_create_autocmd("BufWritePre", {
 	pattern = "*.go",
 	callback = function()
