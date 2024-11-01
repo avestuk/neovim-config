@@ -1,0 +1,7 @@
+{
+	"new spam": {
+		"prefix": "ns",
+		"body": "span, ctx := logging.NewSpan(ctx)\ndefer span.End()\n",
+                "description": "Create new span"
+	}
+}
