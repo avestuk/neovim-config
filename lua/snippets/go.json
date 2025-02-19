@@ -3,5 +3,15 @@
 		"prefix": "ns",
 		"body": "span, ctx := logging.NewSpan(ctx)\ndefer span.End()\n",
                 "description": "Create new span"
+	},
+	"new logger from context with span": {
+		"prefix": "nl",
+		"body": "ctx, span, logger := logging.NewLoggerWithSpanFromContext()\ndefer span.End()\n",
+                "description": "Create new logger from context"
+	},
+	"apm capture err": {
+		"prefix": "apmce",
+		"body": "apm.CaptureError(ctx, err).Send()\n",
+                "description": "APM Capture Error"
 	}
 }

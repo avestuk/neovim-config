@@ -13,16 +13,6 @@ local M = {
 	opts = function()
 		local cmp = require("cmp")
 		local lsp_kinds = require("utils").lsp_kinds
-
-		local has_words_before = function()
-			if vim.api.nvim_buf_get_option(0, "buftype") == "prompt" then
-				return false
-			end
-			local line, col = vim.F.unpack_len(vim.api.nvim_win_get_cursor(0))
-			return col ~= 0 and
-			    vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
-		end
-
 		local luasnip = require("luasnip")
 
 		return {
@@ -87,8 +77,8 @@ local M = {
 				end, { "i", "s" }),
 			}),
 			sources = {
-				{ name = "nvim_lsp" },
 				{ name = "luasnip" },
+				{ name = "nvim_lsp" },
 				{ name = "nvim_lua" },
 				{ name = "buffer" },
 				{ name = "path" },
@@ -101,6 +91,12 @@ local M = {
 				ghost_text = {
 					hl_group = "LspCodeLens",
 				},
+			},
+			-- This fixes the ordering issue where LSP items would always be selected first!!!
+			-- https://github.com/hrsh7th/nvim-cmp/discussions/1670#discussioncomment-8406939
+			preselect = cmp.PreselectMode.None,
+			completion = {
+				completeopt = 'menu,menuone,preview',
 			},
 		}
 	end,
